@@ -1,0 +1,242 @@
+import java.util.*;
+import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList jihe = new ArrayList();//ArrayList jihe也可以使用泛型，定义为ArrayList <Students>jihe后面以此类推
+        //也可以理解为强制转换
+        while (true) {
+            System.out.println("*********学生管理系统*********");
+            System.out.println("        1.查看学生信息");
+            System.out.println("        2.增加学生");
+            System.out.println("        3.修改学生");
+            System.out.println("        4.删除学生");
+            System.out.println("        5.将绩点排序后输出");
+            System.out.println("        6.退出此系统");//这种作用的的东西还是要写一下的
+            Scanner shuru = new Scanner(System.in);
+            System.out.println("请选择功能：");
+            String gongNeng = shuru.nextLine();
+            switch (gongNeng) {
+                case "1":
+                    findstudent(jihe);
+                    break;
+                case "2":
+                    addstudent(jihe);
+                    break;
+                case "3":
+                    changestudent(jihe);
+                    break;
+                case "4":
+                    deletestudent(jihe);
+                    break;
+                case "5":
+                    jidianSort(jihe);
+                    break;
+                case "6"://没东西直接跳过进行下一种情况
+                default:
+                    System.out.println("谢谢你的使用.");
+                    System.exit(0);//百度到的方法可以退出系统
+                    break;
+            }
+        }
+    }
+
+    //输出学生信息
+    public static void findstudent(ArrayList jihe) {
+        if (jihe.size() == 0) {
+            System.out.println("信息为空，请先输入！！！");
+            return;
+        } else {
+            System.out.println("学号\t姓名\t年龄\t平均绩点");//水平制表
+            for (int i = 0; i < jihe.size(); i++) {
+                Student s = (Student) jihe.get(i);
+                System.out.println(s.getNumber() + "  \t" + s.getName() + "  \t" + s.getAge() + "  \t" + s.getjidian());
+            }
+        }
+    }
+
+    //将信息添加到数组当中
+    public static void addstudent(ArrayList jihe) {
+        Scanner shuru = new Scanner(System.in);
+        String stuId;
+        while (true) {
+            System.out.println("请输入学号：");
+            stuId = shuru.nextLine();
+            boolean panduan = false;
+            for (int i = 0; i < jihe.size(); i++) {
+                Student s = (Student) jihe.get(i);
+                if (s.getNumber().equals(stuId)) {
+                    panduan = true;
+                    break;
+                }
+            }
+            if (panduan) {
+                System.out.println("您输入的账号被占用！！！");
+            } else {
+                break;
+            }
+        }//判断学号是否重复
+        System.out.println("请输入姓名：（中英文都可以）");
+        String name = shuru.nextLine();
+        System.out.println("请输入年龄：");
+        String age = shuru.nextLine();
+        System.out.println("请输入平均绩点（输入浮点数,整数其实也可以.可以转化）：");//在设计的时候不太会所有类型都能输入的scanner方法，所以将就一下...
+        float jidian = shuru.nextFloat();
+        //创建学生对象
+        Student s = new Student();
+        s.setNumber(stuId);
+        s.setName(name);
+        s.setAge(age);
+        s.setJidian(jidian);
+        //把学生对象添加到集合
+        jihe.add(s);
+        System.out.println("添加学生成功！");
+    }
+
+    //删除学生信息
+    public static void deletestudent(ArrayList jihe) {
+        Scanner shuru = new Scanner(System.in);
+        System.out.print("请输入要删除的学号：");
+        String deleId = shuru.nextLine();
+        boolean panduan = false;
+        for (int i = 0; i < jihe.size(); i++) {
+            Student s = (Student) jihe.get(i);
+            if (s.getNumber().equals(deleId)) {
+                panduan = true;
+            }
+            if (panduan) {
+                jihe.remove(i);//ArrayList的删除方法
+                System.out.println("成功！！");
+            } else {
+                System.out.println("不存在，请重新选择！");
+        }
+        }
+    }
+
+    //修改类
+    public static void changestudent(ArrayList jihe) {
+        Scanner shuru = new Scanner(System.in);
+        System.out.print("请输入要修改的学号：");
+        String changeId = shuru.nextLine();
+        boolean panduan = false;
+        int j = 0;
+        for (int i = 0; i < jihe.size(); i++) {
+            Student s = (Student) jihe.get(i);
+            if (s.getNumber().equals(changeId)) {
+                panduan = true;
+                j = i;
+            }
+        }
+        if (panduan) {
+            System.out.println("您要修改的学生不存在，请重新操作！");
+        } else {
+            System.out.println("请输入新姓名：");
+            String name = shuru.nextLine();
+            System.out.println("请输入新年龄：");
+            String age = shuru.nextLine();
+            System.out.println("请输入平均绩点：");
+            float jidian = shuru.nextFloat();
+            //创建学生对象
+            Student s = new Student();
+            s.setNumber(changeId);
+            s.setName(name);
+            s.setAge(age);
+            s.setJidian(jidian);
+            //修改学生对象
+            jihe.set(j, s);//Arraylist的替换方法^_^
+            System.out.println("修改学生成功！！！");
+        }
+    }
+
+    //排序类
+    public static void jidianSort(ArrayList jihe) {
+        float temp;
+        System.out.println("绩点排序前为");
+        System.out.println("学号\t姓名\t年龄\t平均绩点");
+        for (int i = 0; i < jihe.size(); i++) {
+            Student s = (Student) jihe.get(i);
+            System.out.println(s.getNumber() + "     \t" + s.getName() + "     \t" + s.getjidian());
+        }
+        for (int i = 0; i < jihe.size(); i++) {
+            for (int j = i+1; j < jihe.size() ; j++) {
+                Student s = (Student) jihe.get(i);
+                Student m = (Student) jihe.get(j);//创建两个可以获得下标的Student对象，与结构体的定义使用类似，上面提到
+                if (getBig(s.getjidian(), m.getjidian()) == 1) ;
+                {
+                    temp = s.getjidian();//调用比大小函数
+                    s.setJidian(m.getjidian());
+                    m.setJidian(temp);//交换排序
+                }
+            }
+        }
+        System.out.println("绩点排序过后为");
+        System.out.println("学号\t姓名\t年龄\t平均绩点");
+        for (int i = 0; i < jihe.size(); i++) {
+            Student s = (Student) jihe.get(i);//取下标
+            System.out.println(s.getNumber() + "     \t" + s.getName() + "     \t" + s.getjidian());
+        }
+    }
+   static int getBig(float a, float b) {
+        if (a > b) {
+            return 1;
+        } else if (b > a) {
+            return -1;
+        } else return 0;
+    }
+}
+
+    class Student {
+    private String name;
+    private String number;
+    private String age;
+    private Float jidian;
+    public Student()
+    { }//每一个Java类都要有构造函数，如果没有，编译器会自动加上构造函数,so.......
+    public Student(String name, String stdId, String age, float jidian) {
+        super();
+        this.name = name;
+        this.number = stdId;
+        this.age = age;
+        this.jidian = jidian;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getNumber()
+    {
+        return number;
+    }
+
+    public void setNumber(String stdId)
+    {
+        this.number = stdId;
+    }
+
+    public String getAge()
+    {
+        return age;
+    }
+
+    public void setAge(String age)
+    {
+        this.age = age;
+    }
+
+    public float getjidian()
+    {
+        return jidian;
+    }
+
+    public void setJidian(float jidian)
+    {
+        this.jidian = jidian;
+    }
+}
